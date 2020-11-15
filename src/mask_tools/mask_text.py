@@ -25,5 +25,6 @@ def words_to_dense(dictionary: Dictionary, words: list):
     return dense
 
 
-
-
+if __name__ == '__main__':
+    words = split_into_words('筑波は関東にある', only_noun=True)
+    print(words)
