@@ -46,12 +46,12 @@ def query_insert(db:str, table:str, d):
 
 
 class SQL(object):
-    def __init__(self, host='localhost', port=3306, user='root', password='password', databese='databese', charset='utf8mb4'):
+    def __init__(self, host='localhost', port=3306, user='root', password='password', database='database', charset='utf8mb4'):
         self.host = host
         self.port = port
         self.user = user
         self.password = password
-        self.databese = databese
+        self.database = database
         self.charset = charset
         self.conn = None
         self.cur = None
@@ -64,7 +64,7 @@ class SQL(object):
             port=self.port,
             user=self.user,
             password=self.password,
-            database=self.databese,
+            database=self.database,
             charset=self.charset)
         self.cur = self.conn.cursor()
         self.cur_dict = self.conn.cursor(dictionary=True)
