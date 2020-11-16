@@ -55,10 +55,9 @@ class SQL(object):
         self.charset = charset
         self.conn = None
         self.cur = None
-        self.cur_dict = None
         self.set()
 
-    def set(self):
+    def set(self,dictionary=False):
         self.conn = mysql.connector.connect(
             host=self.host,
             port=self.port,
@@ -66,8 +65,7 @@ class SQL(object):
             password=self.password,
             database=self.database,
             charset=self.charset)
-        self.cur = self.conn.cursor()
-        self.cur_dict = self.conn.cursor(dictionary=True)
+        self.cur = self.conn.cursor(dictionary=dictionary)
 
     def execute(self,query):
         self.set()
@@ -116,9 +114,9 @@ class SQL(object):
         return r
 
     def fetch_dict(self,query:str):
-        self.set()
+        self.set(dictionary=True)
         self.execute(query)
-        r = self.cur_dict.fetchall()
+        r = self.cur.fetchall()
         self.conn.close()
         return r
 
