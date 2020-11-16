@@ -66,8 +66,8 @@ class SQL(object):
             charset=self.charset)
         self.cur = self.conn.cursor(dictionary=dictionary)
 
-    def execute(self,query):
-        self.set()
+    def execute(self,query,dictionary=False):
+        self.set(dictionary=dictionary)
         try:
             self.cur.execute(query)
         except mysql.connector.errors.IntegrityError as e:
@@ -106,15 +106,13 @@ class SQL(object):
         self.conn.close()
 
     def fetch(self,query:str):
-        self.set()
         self.execute(query)
         r = self.cur.fetchall()
         self.close()
         return r
 
     def fetch_dict(self,query:str):
-        self.set(dictionary=True)
-        self.execute(query)
+        self.execute(query,dictionary=True)
         r = self.cur.fetchall()
         self.close()
         return r
