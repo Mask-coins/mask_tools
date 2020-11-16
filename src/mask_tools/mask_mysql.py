@@ -108,13 +108,15 @@ class SQL(object):
     def close(self):
         self.conn.close()
 
-    def fetch(self,query:str,DBname:str):
+    def fetch(self,query:str):
+        self.set()
         self.execute(query)
         r = self.cur.fetchall()
         self.conn.close()
         return r
 
-    def fetch_dict(self,query:str,DBname:str):
+    def fetch_dict(self,query:str):
+        self.set()
         self.execute(query)
         r = self.cur_dict.fetchall()
         self.conn.close()
