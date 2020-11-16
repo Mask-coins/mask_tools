@@ -55,7 +55,6 @@ class SQL(object):
         self.charset = charset
         self.conn = None
         self.cur = None
-        self.set()
 
     def set(self,dictionary=False):
         self.conn = mysql.connector.connect(
@@ -110,14 +109,14 @@ class SQL(object):
         self.set()
         self.execute(query)
         r = self.cur.fetchall()
-        self.conn.close()
+        self.close()
         return r
 
     def fetch_dict(self,query:str):
         self.set(dictionary=True)
         self.execute(query)
         r = self.cur.fetchall()
-        self.conn.close()
+        self.close()
         return r
 
     def insert(self,db:str, table:str, d):
