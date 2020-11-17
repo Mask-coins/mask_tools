@@ -122,3 +122,5 @@ class SQL(object):
         self.execute(query)
         self.commit()
         self.close()
+
+
