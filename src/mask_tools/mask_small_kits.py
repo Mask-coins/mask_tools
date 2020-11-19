@@ -2,13 +2,13 @@ import random
 import pandas
 
 
-class Greedy(object):
+class ChooseGreedy(object):
     def __init__(self,k,epsilon,user_list:tuple):
         self.epsilon = [epsilon]
         self.esum = epsilon
-        r = Greedy.RandRule()
+        r = ChooseGreedy.RandRule()
         r.set_candidate(user_list)
-        self.rule = [r]  # type:list[Greedy.Rule]
+        self.rule = [r]  # type:list[ChooseGreedy.Rule]
         self.chosen = None  # type:set[int]
         self.K = k  # type:int
 
@@ -48,7 +48,7 @@ class Greedy(object):
 
     def set_rule(self, epsilon ,candidate:pandas.DataFrame):
         self.epsilon.append(epsilon)
-        rule = Greedy.Rule()
+        rule = ChooseGreedy.Rule()
         rule.set_candidate(candidate)
         self.rule.append(rule)
         self.esum += epsilon
@@ -85,8 +85,11 @@ class Greedy(object):
 
     def print(self):
         for r in self.rule:
-            if type(r) == Greedy.RandRule:
+            if type(r) == ChooseGreedy.RandRule:
                 continue
             print('pick num : ' + str(r.picked))
             print(r.candidate.T)
+
+
+
 

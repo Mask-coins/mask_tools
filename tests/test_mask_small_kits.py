@@ -17,11 +17,11 @@ def set_data_Greedy():
 def test_Greedy():
     k = 5
     user_id,candidate1,candidate2 = set_data_Greedy()
-    b = msk.Greedy(k, 0.1, tuple(user_id))
+    b = msk.ChooseGreedy(k, 0.1, tuple(user_id))
     b.set_rule(0.4, candidate1)
     with pytest.raises(ValueError):
         b.set_rule(0.6, candidate2)
-    b = msk.Greedy(5, 0.0, tuple(user_id))
+    b = msk.ChooseGreedy(5, 0.0, tuple(user_id))
     b.set_rule(0.5, candidate1)
     b.set_rule(0.5, candidate2)
     u = b.choose()
