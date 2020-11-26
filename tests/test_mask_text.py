@@ -12,10 +12,10 @@ def test_dictionary():
     with pytest.raises(TypeError):
         mt.dictionary('aaa')
 
+
 def test_words_to_sparse():
     dictionary = mt.dictionary(['aaa','bbb','ccc'])
     dense = mt.words_to_sparse(dictionary,['aaa','bbb'])
-
 
 
 if __name__ == '__main__':

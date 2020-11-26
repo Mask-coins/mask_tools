@@ -1,6 +1,7 @@
 import MeCab
 from gensim import matutils
 from gensim.corpora import Dictionary
+import numpy as np
 from scipy.sparse import coo_matrix
 
 
@@ -20,7 +21,7 @@ def split_into_words(text, only_noun=False):
     return words
 
 
-def dictionary(words, no_below=None, no_above=None):
+def dictionary(words, no_below=None, no_above=None) -> Dictionary:
     # Dictionary は単語の配列の配列を受け付ける
     d = None
     if isinstance(words, (list, tuple)):
@@ -46,13 +47,13 @@ def dictionary(words, no_below=None, no_above=None):
     return d
 
 
-def words_to_dense(dictionary: Dictionary, words: list):
+def words_to_dense(dictionary: Dictionary, words: list) -> np.ndarray:
     tmp = dictionary.doc2bow(words)
     dense = matutils.corpus2dense([tmp], num_terms=len(dictionary)).T[0]
     return dense
 
 
-def words_to_sparse(dictionary: Dictionary, words: list):
+def words_to_sparse(dictionary: Dictionary, words: list) -> coo_matrix:
     tmp = dictionary.doc2bow(words)
     dense = matutils.corpus2dense([tmp], num_terms=len(dictionary)).T[0]
     return coo_matrix(dense)

@@ -1,6 +1,6 @@
 import random
 import pandas
-
+from typing import List,Set
 
 class ChooseGreedy(object):
     def __init__(self,k,epsilon,user_list:tuple):
@@ -8,8 +8,8 @@ class ChooseGreedy(object):
         self.esum = epsilon
         r = ChooseGreedy.RandRule()
         r.set_candidate(user_list)
-        self.rule = [r]  # type:list[ChooseGreedy.Rule]
-        self.chosen = None  # type:set[int]
+        self.rule = [r]  # type:List[ChooseGreedy.Rule]
+        self.chosen = None  # type:Set[int]
         self.K = k  # type:int
 
     class Rule:
@@ -89,7 +89,6 @@ class ChooseGreedy(object):
                 continue
             print('pick num : ' + str(r.picked))
             print(r.candidate.T)
-
 
 
 
