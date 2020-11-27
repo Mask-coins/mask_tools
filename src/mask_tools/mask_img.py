@@ -4,7 +4,7 @@ import math
 from pathlib import Path
 
 
-def image_patch(img_input, patch_size=50):
+def image_patch(img_input, patch_size=50, mode='RGB'):
     '''
     dividing picture into patch
     :param img_input: array or pass of file.
@@ -14,7 +14,7 @@ def image_patch(img_input, patch_size=50):
     return numpy.ndarray(7,5,50,50,3)
     '''
     if type(img_input)==str or isinstance(img_input, Path):
-        img = np.array(Image.open(img_input))
+        img = np.array(Image.open(img_input).convert(mode))
     else:
         img = np.array(img_input)
     if img.ndim == 3:
