@@ -1,6 +1,7 @@
 from PIL import Image
 import numpy as np
 import math
+from pathlib import Path
 
 
 def image_patch(img_input, patch_size=50):
@@ -12,7 +13,7 @@ def image_patch(img_input, patch_size=50):
     if you input image:(348,236,3) and path_size=50,
     return numpy.ndarray(7,5,50,50,3)
     '''
-    if type(img_input)==str:
+    if type(img_input)==str or isinstance(img_input, Path):
         img = np.array(Image.open(img_input))
     else:
         img = np.array(img_input)
