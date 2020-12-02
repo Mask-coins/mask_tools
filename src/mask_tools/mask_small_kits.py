@@ -1,6 +1,7 @@
 import random
 import pandas
 from typing import List,Set
+import numpy as np
 
 class ChooseGreedy(object):
     def __init__(self,k,epsilon,user_list:tuple):
@@ -90,5 +91,12 @@ class ChooseGreedy(object):
             print('pick num : ' + str(r.picked))
             print(r.candidate.T)
 
+
+class TargetVectorSimilarity(object):
+    def __init__(self,target):
+        self.t = target
+
+    def cos(self,t):
+        return np.dot(self.t,t)/(np.linalg.norm(self.t)*np.linalg.norm(t))
 
 
