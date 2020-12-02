@@ -48,6 +48,8 @@ def dictionary(words, no_below=None, no_above=None) -> Dictionary:
 
 
 def words_to_dense(dictionary: Dictionary, words: list) -> np.ndarray:
+    if words is None:
+        words = []
     tmp = dictionary.doc2bow(words)
     dense = matutils.corpus2dense([tmp], num_terms=len(dictionary)).T[0]
     return dense
