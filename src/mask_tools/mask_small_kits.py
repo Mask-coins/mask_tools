@@ -2,6 +2,7 @@ import random
 import pandas
 from typing import List,Set
 import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
 
 class ChooseGreedy(object):
     def __init__(self,k,epsilon,user_list:tuple):
@@ -95,8 +96,12 @@ class ChooseGreedy(object):
 class TargetVectorSimilarity(object):
     def __init__(self,target):
         self.t = target
+        self.m = target.reshape((1,-1))
+        self.n = np.linalg.norm(target)
 
     def cos(self,t):
-        return np.dot(self.t,t)/(np.linalg.norm(self.t)*np.linalg.norm(t))
+        return np.dot(self.t,t)/(np.linalg.norm(t)*self.n)
 
+    def cos_samples(self,t):
+        return cosine_similarity(self.m,t)[0]
 

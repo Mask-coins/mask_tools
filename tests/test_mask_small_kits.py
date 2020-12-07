@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import math
 from src.mask_tools import mask_small_kits as msk
+from scipy.sparse import  csr_matrix
 
 def set_data_Greedy():
     user_id = [1,6,3,9,2,4,7,3]
@@ -41,7 +42,10 @@ def test_TargetVectorSimilarity():
         at += t[i] * t[i]
         asp += sp.t[i] * sp.t[i]
     assert abs(sp.cos(t) - d/math.sqrt(at*asp)) < 0.0001
-
+    sp = msk.TargetVectorSimilarity(np.array([0,0,1,1,3,4]))
+    t = csr_matrix([[1,2,4,0,3,4],[0,0,1,0,2,0]])
+    ans = sp.cos_samples(t)
+    assert abs(ans[0] - d/math.sqrt(at*asp)) < 0.0001
 
 
 if __name__ == '__main__':
