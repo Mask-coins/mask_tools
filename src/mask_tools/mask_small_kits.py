@@ -1,6 +1,6 @@
 import random
 import pandas
-from typing import List,Set
+from typing import List,Set,Union
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 
@@ -16,19 +16,25 @@ class ChooseGreedy(object):
 
     class Rule:
         def __init__(self):
-            self.candidate = None # type:pandas.DataFrame
+            self.candidate = None  # type:Union[pandas.DataFrame,pandas.Series]
             self.picked = 0
 
-        def set_candidate(self,candidate:pandas.DataFrame):
+        def set_candidate(self,candidate:Union[pandas.DataFrame,pandas.Series]):
             self.candidate = candidate
             self.sort()
 
         def sort(self):
-            self.candidate.sort_values(1, ascending=False, inplace=True)
-            self.candidate.reset_index()
+            if isinstance(self.candidate, pandas.Series):
+                self.candidate.sort_values(ascending=False, inplace=True)
+            elif isinstance(self.candidate,pandas.DataFrame):
+                self.candidate.sort_values(1, ascending=False, inplace=True)
+                self.candidate.reset_index()
 
         def pick(self):
-            user_id = self.candidate.iat[self.picked, 0]
+            if isinstance(self.candidate, pandas.Series):
+                user_id = self.candidate.index[self.picked]
+            elif isinstance(self.candidate,pandas.DataFrame):
+                user_id = self.candidate.iat[self.picked, 0]
             self.picked += 1
             return user_id
 
@@ -67,7 +73,7 @@ class ChooseGreedy(object):
                 return rule_poz
             rule_poz += 1
 
-    def choose(self):
+    def choose(self, print_status=False):
         if self.esum > 1:
             raise ValueError('確率の合計値が1ではありません')
         self.chosen = set()
@@ -80,7 +86,8 @@ class ChooseGreedy(object):
                 continue
             self.chosen.add(user_id)
             k+=1
-        # self.print()
+        if print_status:
+            self.print()
         for r in self.rule:
             r.reset()
         return self.chosen
@@ -90,7 +97,10 @@ class ChooseGreedy(object):
             if type(r) == ChooseGreedy.RandRule:
                 continue
             print('pick num : ' + str(r.picked))
-            print(r.candidate.T)
+            if isinstance(r.candidate,pandas.Series):
+                print(r.candidate.index)
+            if isinstance(r.candidate,pandas.DataFrame):
+                print(r.candidate.T)
 
 
 class TargetVectorSimilarity(object):
