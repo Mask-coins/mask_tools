@@ -2,10 +2,10 @@ import MeCab
 from gensim import matutils
 from gensim.corpora import Dictionary
 import numpy as np
-from scipy.sparse import coo_matrix
+from scipy.sparse import csr_matrix
 
 
-def split_into_words(text, only_noun=False):
+def split_into_words(text:str, only_noun=False):
     if text is None:
         return []
     tagger = MeCab.Tagger("-Owakati")
@@ -55,10 +55,16 @@ def words_to_dense(dictionary: Dictionary, words: list) -> np.ndarray:
     return dense
 
 
-def words_to_sparse(dictionary: Dictionary, words: list) -> coo_matrix:
+def words_to_sparse(dictionary: Dictionary, words: list) -> csr_matrix:
     tmp = dictionary.doc2bow(words)
     dense = matutils.corpus2dense([tmp], num_terms=len(dictionary)).T[0]
-    return coo_matrix(dense)
+    return csr_matrix(dense)
 
+
+def text_to_sparse(dictionary: Dictionary, text: str) -> csr_matrix:
+    words = split_into_words(text)
+    tmp = dictionary.doc2bow(words)
+    dense = matutils.corpus2dense([tmp], num_terms=len(dictionary)).T[0]
+    return csr_matrix(dense)
 
 
