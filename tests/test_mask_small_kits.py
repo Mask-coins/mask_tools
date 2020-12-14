@@ -54,10 +54,9 @@ def test_Greedy_Series():
     u = b.choose(print_status=True)
     print(u)
     assert len(u) == k
-    b = msk.ChooseGreedy(5,1.0,tuple(user_id))
-    u = b.choose(print_status=True)
-    b.print()
-    print(u)
+    for _ in range(10000):
+        b = msk.ChooseGreedy(5,1.0,tuple(user_id))
+        u = b.choose(print_status=True)
 
 
 def test_TargetVectorSimilarity():

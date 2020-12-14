@@ -75,7 +75,7 @@ class ChooseGreedy(object):
         return rule_poz
 
     def choose(self, print_status=False):
-        if self.esum > 1:
+        if self.esum > 1.0001:
             raise ValueError('確率の合計値が1ではありません')
         self.chosen = set()
         k = 0
