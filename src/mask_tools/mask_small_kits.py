@@ -72,6 +72,7 @@ class ChooseGreedy(object):
             if s > rand:
                 return rule_poz
             rule_poz += 1
+        return rule_poz
 
     def choose(self, print_status=False):
         if self.esum > 1:
