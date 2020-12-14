@@ -60,7 +60,7 @@ class ChooseGreedy(object):
         rule.set_candidate(candidate)
         self.rule.append(rule)
         self.esum += epsilon
-        if self.esum > 1:
+        if self.esum > 1.0001:
             raise ValueError('確率の合計値が1ではありません')
 
     def select_rule(self):
