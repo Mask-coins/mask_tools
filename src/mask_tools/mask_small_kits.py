@@ -25,8 +25,10 @@ class ChooseGreedy(object):
 
         def sort(self):
             if isinstance(self.candidate, pandas.Series):
+                self.candidate=self.candidate.sample(frac=1)
                 self.candidate.sort_values(ascending=False, inplace=True)
             elif isinstance(self.candidate,pandas.DataFrame):
+                self.candidate=self.candidate.sample(frac=1)
                 self.candidate.sort_values(1, ascending=False, inplace=True)
                 self.candidate.reset_index()
 
