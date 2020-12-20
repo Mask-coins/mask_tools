@@ -36,6 +36,8 @@ def dictionary(words, no_below=None, no_above=None) -> Dictionary:
         else:
             d = Dictionary([words])
     else:
+        print(type(words))
+        print(type(words[0]))
         raise TypeError("words=には、strの配列あるいはstrの配列の配列を入力してください。")
     # no_below: 使われてる文章がno_below個以下の単語無視
     # no_above: 使われてる文章の割合がno_above以上の場合無視
