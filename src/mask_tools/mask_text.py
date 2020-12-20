@@ -26,8 +26,8 @@ def split_into_words(text:str, only_noun=False):
 def dictionary(words, no_below=None, no_above=None) -> Dictionary:
     # Dictionary は単語の配列の配列を受け付ける
     d = None
-    if isinstance(words, (list, tuple)):
-        if isinstance(words[0], (list, tuple)):
+    if isinstance(words, (list, tuple, np.ndarray)):
+        if isinstance(words[0], (list, tuple, np.ndarray)):
             d = Dictionary(words)
         else:
             d = Dictionary([words])
