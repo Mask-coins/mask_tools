@@ -9,6 +9,7 @@ def split_into_words(text:str, only_noun=False):
     if text is None:
         return []
     tagger = MeCab.Tagger("-Owakati")
+    tagger.parse('')
     node = tagger.parseToNode(text)
     words = []
     while node:
