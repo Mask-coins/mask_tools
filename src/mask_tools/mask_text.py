@@ -8,6 +8,8 @@ from scipy.sparse import csr_matrix
 def split_into_words(text:str, only_noun=False):
     if text is None:
         return []
+    if not isinstance(text,str):
+        return []
     tagger = MeCab.Tagger("-Owakati")
     tagger.parse('')
     node = tagger.parseToNode(text)
@@ -22,6 +24,7 @@ def split_into_words(text:str, only_noun=False):
         words.append(word)
         node = node.next
     return words
+
 
 
 def dictionary(words, no_below=None, no_above=None) -> Dictionary:
