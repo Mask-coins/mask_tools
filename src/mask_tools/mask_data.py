@@ -90,13 +90,13 @@ class SeriesAccumulateUpdater(object):
         print(self.accumulated)
 
 
-def dataframe_to_dict(p,index:Sequence, drop_group_column=True):
-    if len(index) == 0:
+def dataframe_to_dict(p, column:Sequence, drop_group_column=True):
+    if len(column) == 0:
         return p
-    g = p.groupby(index[0])
+    g = p.groupby(column[0])
     if drop_group_column:
-        return {x: dataframe_to_dict(g.get_group(x).drop(index[0], axis=1),index[1:], drop_group_column=True) for x in g.groups}
-    return {x: dataframe_to_dict(g.get_group(x).drop(index[0], axis=1),index[1:], drop_group_column=False) for x in g.groups}
+        return {x: dataframe_to_dict(g.get_group(x).drop(column[0], axis=1), column[1:], drop_group_column=True) for x in g.groups}
+    return {x: dataframe_to_dict(g.get_group(x).drop(column[0], axis=1), column[1:], drop_group_column=False) for x in g.groups}
 
 
 

@@ -29,8 +29,8 @@ def test_dataframe_to_dict():
         [2,3,3,6],
         [2,4,4,7],
         [2,4,4,8]] ,index=[10,20,30,40,50,60,70,80], columns=['c1','c2','c3','c4'])
-    print(md.dataframe_to_dict(df, index=['c1','c2','c3']))
-    print(md.dataframe_to_dict(df, index=['c1','c2','c3'], drop_group_column=False))
+    print(md.dataframe_to_dict(df, column=['c1', 'c2', 'c3']))
+    print(md.dataframe_to_dict(df, column=['c1', 'c2', 'c3'], drop_group_column=False))
 
 
 if __name__ == '__main__':
