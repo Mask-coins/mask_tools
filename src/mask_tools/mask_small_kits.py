@@ -3,7 +3,7 @@ import pandas
 from typing import List,Set,Union
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
-import pandas as pd
+
 
 class ChooseGreedy(object):
     def __init__(self,k,epsilon,user_list:tuple):
@@ -12,12 +12,12 @@ class ChooseGreedy(object):
         r = ChooseGreedy.RandRule()
         r.set_candidate(user_list)
         self.rule = [r]  # type:List[ChooseGreedy.Rule]
-        self.chosen = None  # type:Set[int]
+        self.chosen = None  # type:Union[Set[int],None]
         self.K = k  # type:int
 
     class Rule:
         def __init__(self):
-            self.candidate = None  # type:Union[pandas.DataFrame,pandas.Series]
+            self.candidate = None  # type:Union[pandas.DataFrame,pandas.Series,None]
             self.picked = 0
 
         def set_candidate(self,candidate:Union[pandas.DataFrame,pandas.Series]):
@@ -34,6 +34,7 @@ class ChooseGreedy(object):
                 self.candidate.reset_index()
 
         def pick(self):
+            user_id = None
             if isinstance(self.candidate, pandas.Series):
                 user_id = self.candidate.index[self.picked]
             elif isinstance(self.candidate,pandas.DataFrame):
@@ -47,7 +48,7 @@ class ChooseGreedy(object):
     class RandRule(Rule):
         def __init__(self):
             super().__init__()
-            self.candidate = None  # type:tuple
+            self.candidate = None  # type:Union[tuple,None]
 
         def set_candidate(self,candidate:tuple):
             self.candidate = candidate
@@ -118,93 +119,6 @@ class TargetVectorSimilarity(object):
 
     def cos_samples(self,t):
         return cosine_similarity(self.m,t)[0]
-
-
-class DataFrameColumnAccumulateUpdater(object):
-    def __init__(self, index, name='table_name'):
-        self.name = name
-        self.poz = -1
-        self.present = pd.DataFrame(index=index)
-        self.accumulated = pd.DataFrame(index=index)
-        self.ones = pd.Series(np.ones(len(index)), index=index)
-        self.zeros = pd.Series(np.zeros(len(index)), index=index)
-
-    def update(self, s:Union[pd.Series,np.ndarray]) -> None:
-        self.poz += 1
-        self.present[self.poz] = s.mul(self.ones, fill_value=0)
-        if self.poz == 0:
-            self.accumulated[self.poz] = self.present[self.poz]
-        else:
-            self.accumulated[self.poz] = self.accumulated[self.poz-1] + self.present[self.poz]
-
-    def update_chosen(self, s:Union[pd.Series,np.ndarray], chosen_series:Union[pd.Series,np.ndarray]) -> None:
-        self.poz += 1
-        self.present[self.poz] = s.mul(chosen_series, fill_value=0)
-        if self.poz == 0:
-            self.accumulated[self.poz] = self.present[self.poz]
-        else:
-            self.accumulated[self.poz] = self.accumulated[self.poz-1] + self.present[self.poz]
-
-    def get_present(self) -> pd.Series:
-        return self.present[self.poz]
-
-    def get_prev(self) -> pd.Series:
-        return self.present[self.poz-1]
-
-    def get_accumulated(self) -> pd.Series:
-        if self.poz == 0:
-            return self.zeros
-        return self.accumulated[self.poz]
-
-    def get_accumulated_prev(self) -> pd.Series:
-        if self.poz == 0:
-            return self.zeros
-        return self.accumulated[self.poz-1]
-
-    def print(self):
-        print(self.name+' : present')
-        print(self.present)
-        print(self.name+' : accumulated')
-        print(self.accumulated)
-
-
-class SeriesAccumulateUpdater(object):
-    def __init__(self, length , name='series'):
-        self.name = name
-        self.poz = -1
-        self.len = length
-        self.present = pd.Series(name=name+'present', index=range(self.len))
-        self.accumulated = pd.Series(name=name+'accumulated', index=range(self.len))
-
-    def update(self, s) -> None:
-        self.poz += 1
-        self.present[self.poz] = s
-        if self.poz == 0:
-            self.accumulated[self.poz] = s
-        else:
-            self.accumulated[self.poz] = s+self.accumulated[self.poz-1]
-
-    def get_present(self) -> pd.Series:
-        return self.present[self.poz]
-
-    def get_prev(self) -> pd.Series:
-        return self.present[self.poz-1]
-
-    def get_accumulated(self) -> pd.Series:
-        if self.poz == 0:
-            return 0
-        return self.accumulated[self.poz]
-
-    def get_accumulated_prev(self) -> pd.Series:
-        if self.poz == 0:
-            return 0
-        return self.accumulated[self.poz-1]
-
-    def print(self):
-        print(self.present.name)
-        print(self.present)
-        print(self.accumulated.name)
-        print(self.accumulated)
 
 
 
