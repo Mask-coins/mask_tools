@@ -120,7 +120,7 @@ class TargetVectorSimilarity(object):
         return cosine_similarity(self.m,t)[0]
 
 
-class DataFrameColumnUpdater(object):
+class DataFrameColumnAccumulateUpdater(object):
     def __init__(self, index, name='table_name'):
         self.name = name
         self.poz = -1
@@ -166,5 +166,45 @@ class DataFrameColumnUpdater(object):
         print(self.present)
         print(self.name+' : accumulated')
         print(self.accumulated)
+
+
+class SeriesAccumulateUpdater(object):
+    def __init__(self, length , name='series'):
+        self.name = name
+        self.poz = -1
+        self.len = length
+        self.present = pd.Series(name=name+'present', index=range(self.len))
+        self.accumulated = pd.Series(name=name+'accumulated', index=range(self.len))
+
+    def update(self, s) -> None:
+        self.poz += 1
+        self.present[self.poz] = s
+        if self.poz == 0:
+            self.accumulated[self.poz] = s
+        else:
+            self.accumulated[self.poz] = s+self.accumulated[self.poz-1]
+
+    def get_present(self) -> pd.Series:
+        return self.present[self.poz]
+
+    def get_prev(self) -> pd.Series:
+        return self.present[self.poz-1]
+
+    def get_accumulated(self) -> pd.Series:
+        if self.poz == 0:
+            return 0
+        return self.accumulated[self.poz]
+
+    def get_accumulated_prev(self) -> pd.Series:
+        if self.poz == 0:
+            return 0
+        return self.accumulated[self.poz-1]
+
+    def print(self):
+        print(self.present.name)
+        print(self.present)
+        print(self.accumulated.name)
+        print(self.accumulated)
+
 
 

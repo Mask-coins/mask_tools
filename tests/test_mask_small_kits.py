@@ -76,8 +76,8 @@ def test_TargetVectorSimilarity():
     assert abs(ans[0] - d/math.sqrt(at*asp)) < 0.0001
 
 
-def test_data_frame_column_updater():
-    q = msk.DataFrameColumnUpdater(index=[10,20,30])
+def test_data_frame_column_accumulate_updater():
+    q = msk.DataFrameColumnAccumulateUpdater(index=[10, 20, 30])
     s = pd.Series([3,6],index=[10,20])
     q.update(s)
     s = pd.Series([3,6],index=[10,20])
@@ -86,11 +86,19 @@ def test_data_frame_column_updater():
     assert (q.get_accumulated().values - np.array([6.0, 6.0, 0.0])).sum() == 0
 
 
+def test_series_accumulate_updater():
+    q = msk.SeriesAccumulateUpdater(5)
+    q.update(3)
+    q.update(6)
+    q.update(12)
+    q.print()
+
+
 if __name__ == '__main__':
     test_Greedy_Dataframe()
     test_Greedy_Series()
     test_TargetVectorSimilarity()
-    test_data_frame_column_updater()
-
+    test_data_frame_column_accumulate_updater()
+    test_series_accumulate_updater()
 
 
