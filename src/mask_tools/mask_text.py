@@ -5,7 +5,7 @@ import numpy as np
 from scipy.sparse import csr_matrix
 
 
-def split_into_words(text:str, only_noun=False):
+def split_into_words(text:str, only_noun=False, pick_feature=None):
     if text is None:
         return []
     if not isinstance(text,str):
@@ -18,6 +18,11 @@ def split_into_words(text:str, only_noun=False):
         if only_noun:
             feature = node.feature.split(",")
             if feature[0] != "名詞":
+                node = node.next
+                continue
+        if pick_feature or len(pick_feature)>0:
+            feature = node.feature.split(",")
+            if feature[0] not in pick_feature:
                 node = node.next
                 continue
         word = node.surface
