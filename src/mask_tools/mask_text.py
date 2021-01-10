@@ -20,7 +20,7 @@ def split_into_words(text:str, only_noun=False, pick_feature=None):
             if feature[0] != "名詞":
                 node = node.next
                 continue
-        if pick_feature or len(pick_feature)>0:
+        if pick_feature and len(pick_feature)>0:
             feature = node.feature.split(",")
             if feature[0] not in pick_feature:
                 node = node.next
