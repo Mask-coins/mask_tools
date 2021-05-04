@@ -71,7 +71,7 @@ def load_tweet_jsonl(file_path, only_geo=False):
         tweets_js['description'] = tweets_js['user'].map(lambda x: x['description'])
         tweets_js['location'] = tweets_js['user'].map(lambda x: x['location'])
         tweets_js['mention'] = tweets_js['entities'].map(lambda x: x['user_mentions'] if x is not None and 'user_mentions' in x else None)
-        if tweets_js['place'].dtype != float:
+        if tweets_js['place'].dtype == object:
             tweets_js['place'] = tweets_js['place'].map(lambda x: x['full_name'] if x is not None else None)
         tweets_geo: pd.DataFrame = tweets_js[['user_id','description','location','created_at','text','mention','place']].copy()
         if only_geo:
