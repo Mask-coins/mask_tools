@@ -63,7 +63,7 @@ def load_tweet_jsonl(file_path, only_geo=False):
     tweets_js: pd.DataFrame = tweets_js.dropna(subset=['id'])
     tweets_js['id'] = tweets_js['id'].map(lambda x: int(x))
     tweets_js = tweets_js.groupby('id').first().copy()
-    if 'retweeted_status' in tweets_js.column:
+    if 'retweeted_status' in tweets_js.columns:
         tweets_js = tweets_js[tweets_js['retweeted_status'].isnull()]
     tweets_js = tweets_js[['user','created_at','text','entities','place']]
     tweets_js['user_id'] = tweets_js['user'].map(lambda x: x['id'])
