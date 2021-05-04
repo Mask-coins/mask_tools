@@ -77,7 +77,8 @@ def load_tweet_jsonl(file_path, only_geo=False):
         if only_geo:
             tweets_geo = tweets_geo.dropna(subset=['place'])
     except Exception as e:
-        pprint.pprint(tweets_js)
+        print(tweets_js.columns)
+        print(tweets_js['place'])
         raise e
     return tweets_geo
 
