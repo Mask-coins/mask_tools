@@ -1,6 +1,7 @@
 import datetime
 import pandas as pd
 import numpy as np
+import pprint
 
 
 def extract_tweets(tweet_full):
@@ -63,17 +64,21 @@ def load_tweet_jsonl(file_path, only_geo=False):
     tweets_js: pd.DataFrame = tweets_js.dropna(subset=['id'])
     tweets_js['id'] = tweets_js['id'].map(lambda x: int(x))
     tweets_js = tweets_js.groupby('id').first().copy()
-    if 'retweeted_status' in tweets_js.columns:
-        tweets_js = tweets_js[tweets_js['retweeted_status'].isnull()]
-    tweets_js = tweets_js[['user','created_at','text','entities','place']]
-    tweets_js['user_id'] = tweets_js['user'].map(lambda x: x['id'])
-    tweets_js['description'] = tweets_js['user'].map(lambda x: x['description'])
-    tweets_js['location'] = tweets_js['user'].map(lambda x: x['location'])
-    tweets_js['mention'] = tweets_js['entities'].map(lambda x: x['user_mentions'] if x is not None and 'user_mentions' in x else None)
-    tweets_js['place'] = tweets_js['place'].map(lambda x: x['full_name'] if x is not None else None)
-    tweets_geo: pd.DataFrame = tweets_js[['user_id','description','location','created_at','text','mention','place']].copy()
-    if only_geo:
-        tweets_geo = tweets_geo.dropna(subset=['place'])
+    try:
+        if 'retweeted_status' in tweets_js.columns:
+            tweets_js = tweets_js[tweets_js['retweeted_status'].isnull()]
+        tweets_js = tweets_js[['user','created_at','text','entities','place']]
+        tweets_js['user_id'] = tweets_js['user'].map(lambda x: x['id'])
+        tweets_js['description'] = tweets_js['user'].map(lambda x: x['description'])
+        tweets_js['location'] = tweets_js['user'].map(lambda x: x['location'])
+        tweets_js['mention'] = tweets_js['entities'].map(lambda x: x['user_mentions'] if x is not None and 'user_mentions' in x else None)
+        tweets_js['place'] = tweets_js['place'].map(lambda x: x['full_name'] if x is not None else None)
+        tweets_geo: pd.DataFrame = tweets_js[['user_id','description','location','created_at','text','mention','place']].copy()
+        if only_geo:
+            tweets_geo = tweets_geo.dropna(subset=['place'])
+    except Exception as e:
+        pprint.pprint(tweets_js)
+        raise e
     return tweets_geo
 
 
